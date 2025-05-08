@@ -1,7 +1,7 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-#define _VERSION 1.000007 // Version of the program
+#define _VERSION 1.000008 // Version of the program
 
 //will be print when help command is called.
 extern const char* commands_list[];

@@ -5,11 +5,25 @@
 #include "commands.h" 
 
 const char* commands_list[] = {
-    "HELP: List all available commands",
-    "VERSION: Show the version of the program",
-    "EXIT: Exit the program",
-    "CLEAR: Clear the screen"
+    "--help: List all available commands",
+    "--version: Show the version of the program",
+    "--exit: Exit the program",
+    "--clear: Clear the screen"
 };
+
+typedef struct {
+    const char* CommmandName;
+    void (*FunctionPointer)();
+} Command;
+
+Command CommandTable[] = {
+    {"--help", HELP},
+    {"--version", VERSION},
+    {"--exit", EXIT},
+    {"--clear", CLEAR}
+};
+
+int CommandCount = sizeof(CommandTable)/sizeof(Command);
 
 void HELP(){
     for(int i=0;i<4;i++){
@@ -31,18 +45,16 @@ void CLEAR(){
 }
 
 void initialize_commands(char* command){
-    printf(">> ");
-    scanf("%s", command);
-    command[strcspn(command, "\n")] = 0; // Remove newline character if present
-    if (strcmp(command, "HELP") == 0) {
-        HELP();
-    } else if (strcmp(command, "VERSION") == 0) {
-        VERSION();
-    } else if (strcmp(command, "EXIT") == 0){
-        EXIT();
-    } else if(strcmp(command, "CLEAR") == 0){
-        CLEAR();
-    } else {
-        printf("Unknown command: %s\n", command);
+    while (command!=NULL){
+        printf(">> ");
+        scanf("%s", command);
+        for(int i=0;i<CommandCount; ++i){
+            if(strcmp(command,CommandTable[i].CommmandName)==0){
+                CommandTable[i].FunctionPointer();
+                break;
+            } else{
+                printf("unknown command: %s", command); //bug there but I'll fix it next time. the bug is the message unknown command: %s is printing itself twice and causing clutter on the display.
+            }
+        }
     }
 }
